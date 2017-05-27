@@ -10,8 +10,6 @@ console.log('nodeEnv=' + nodeEnv);
 var config = require('./config/' + nodeEnv);
 console.log(config);
 
-console.log('process.env.PORT=' + process.env.PORT);
-
 const Messenger = require(__base + '/utils/messenger').Messenger;
 const SignalManager = require(__base + '/utils/signal-manager').SignalManager;
 
@@ -26,7 +24,7 @@ var server = http.createServer(function(req, res) {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
 	res.end('Hello world!');
 });
-server.listen(process.env.PORT);
+server.listen(config.http.port);
 
 /*
 var app = express();
