@@ -16,6 +16,10 @@ const SignalManager = require(__base + '/utils/signal-manager').SignalManager;
 const messenger = new Messenger(config);
 const signalManager = new SignalManager(config, messenger);  
 
+var date = new Date();
+
+console.log('TimezoneOffset: ' + date.getTimezoneOffset());
+
 process.on('uncaughtException', function (error) {
    console.log(error.stack);
 });
