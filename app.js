@@ -1,4 +1,6 @@
+const sys = require('sys');
 const util = require('util');
+const http = require('http');
 const express = require('express');
 
 global.__base = __dirname;
