@@ -20,13 +20,6 @@ process.on('uncaughtException', function (error) {
    console.log(error.stack);
 });
 
-var server = http.createServer(function(req, res) {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-	res.end('Hello world!');
-});
-server.listen(config.http.port);
-
-/*
 var app = express();
 
 var server = http.createServer(app).listen(config.http.port); 
@@ -34,4 +27,3 @@ var server = http.createServer(app).listen(config.http.port);
 app.get('/', function(req, res) {
     res.send('SignalCast is running'); 
 });
-*/
