@@ -1,5 +1,3 @@
-
-
 class Signal {
     constructor(instrumentManager, messenger) {
         this.instrumentManager = instrumentManager;

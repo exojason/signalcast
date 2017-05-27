@@ -6,9 +6,8 @@
   ],
   "dependencies": {
     "express": "3.2.x",
-    "mustache": "2.1.x",
-    "nexmo": "^2.0.2",
-    "poloniex": "0.x.x"
+    "nexmo": "2.0.x",
+    "poloniex-api-node": "1.1.x"
   },
   "private": true
 }
