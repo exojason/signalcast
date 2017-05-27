@@ -3,16 +3,23 @@ const express = require('express');
 
 global.__base = __dirname;
 
-const config = require('./config');
+var nodeEnv = process.env.NODE_ENV || 'development';
+var config = require('./config/' + nodeEnv);
 
 const Messenger = require(__base + '/utils/messenger').Messenger;
 const SignalManager = require(__base + '/utils/signal-manager').SignalManager;
 
-const app = express();
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
-
 const messenger = new Messenger(config);
-const signalManager = new SignalManager(config, messenger);        
+const signalManager = new SignalManager(config, messenger);  
+
+process.on('uncaughtException', function (error) {
+   console.log(error.stack);
+});
+
+var app = express();
+
+var server = http.createServer(app).listen(config.http.port); 
+
+app.get('/', function(req, res) {
+    res.send('SignalCast is running'); 
+});

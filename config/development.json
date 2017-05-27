@@ -1,0 +1,40 @@
+{
+    "http": {
+        "port": 3000
+    },
+    "users": [
+        {   
+            "firstName": "Jason",
+            "lastName": "Roberts",
+            "username": "jason",
+            "phone": "16266764594",
+            "email": "jasonr11@gmail.com",
+            "blackoutPeriods": [{
+                "start": "11:30 pm",
+                "end": "7 am"
+            }]
+        },
+        {
+            "firstName": "Dominic",
+            "lastName": "Tascarella",
+            "username": "dominic",
+            "phone": "18506869304",
+            "email": "domtasc@hotmail.com",
+            "blackoutPeriods": [{
+                "start": "8:00pm",
+                "end": "5:00am"
+            }]
+        }
+    ],
+    "signals": [        
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_XMR",
+            "period": "10min",
+            "threshold": "9.0%",
+            "timeout": "30min",
+            "subscribers": ["jason", "dominic"],
+            "enabled": true
+        }
+    ]
+}
