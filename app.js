@@ -4,7 +4,11 @@ const express = require('express');
 global.__base = __dirname;
 
 var nodeEnv = process.env.NODE_ENV || 'development';
+console.log('nodeEnv=' + nodeEnv);
+
 var config = require('./config/' + nodeEnv);
+console.log(config);
+
 
 const Messenger = require(__base + '/utils/messenger').Messenger;
 const SignalManager = require(__base + '/utils/signal-manager').SignalManager;
