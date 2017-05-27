@@ -32,7 +32,6 @@ class TradeQueue {
     addTrades(trades) {
         console.log('addTrades-1: trades.length=' + trades.length);
         console.log('addTrades-2: this.trades.length=' + this.trades.length);        
-        console.log(trades);
 
         if (!this.trades.length) {
             let now = new Date();    
@@ -44,16 +43,16 @@ class TradeQueue {
                 let trade = trades[i];        
                 let elapsed = (now - trade.timestamp) / 1000;
 
-                console.log('addTrades-3c: trade.timestamp=' + trade.timestamp);                
-                console.log('addTrades-3d: elapsed=' + elapsed);
+                //console.log('addTrades-3c: trade.timestamp=' + trade.timestamp);                
+                //console.log('addTrades-3d: elapsed=' + elapsed);
 
                 if (elapsed <= this.period) {   
-                    console.log('addTrades-3e:');                    
+                    //console.log('addTrades-3e:');                    
 
                     this.trades.push(trade);   
                 }
 
-                console.log('addTrades-3f: this.trades.length=' + this.trades.length);                      
+                //console.log('addTrades-3f: this.trades.length=' + this.trades.length);                      
             }
 
             console.log('addTrades-4:');            
@@ -86,7 +85,7 @@ class TradeQueue {
             let trade = this.trades[i];
             let elapsed = (now - trade.timestamp) / 1000;;
             
-            console.log('    i=' + i + ', trade.timestamp=' + trade.timestamp + ', elapsed=' + elapsed + ', ');   
+            //console.log('    i=' + i + ', trade.timestamp=' + trade.timestamp + ', elapsed=' + elapsed + ', ');   
 
             if (elapsed < this.period) {
                 removeCount = i; 
