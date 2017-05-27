@@ -1,0 +1,14 @@
+{
+  "name": "signalcast",
+  "version": "0.1.0",
+  "contributors": [
+    "Jason Roberts <jasonr11@gmail.com>"
+  ],
+  "dependencies": {
+    "express": "3.2.x",
+    "mustache": "2.1.x",
+    "nexmo": "^2.0.2",
+    "poloniex": "0.x.x"
+  },
+  "private": true
+}
