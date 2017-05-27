@@ -69,6 +69,9 @@ class TradeQueue {
     }
 
     calcStats() {
+        console.log('calcStats-: trades:');
+        console.log(this.trades);
+
         this.open = this.trades[0].rate;
         this.low = this.open;
         this.high = this.open;    
@@ -98,7 +101,6 @@ class TradeQueue {
             this.netVolume = this.buyVolume - this.sellVolume;
         }   
     } 
-
 }
 
 exports.TradeQueue = TradeQueue;
