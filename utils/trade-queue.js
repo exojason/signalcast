@@ -30,7 +30,14 @@ class TradeQueue {
     }
 
     addTrades(trades) {
+        console.log('addTrades-1: trades.length=' + trades.length);
+        console.log('addTrades-2: this.trades.length=' + this.trades.length);        
+        console.log(trades);
+
         if (!this.trades.length) {
+
+            console.log('addTrades-3:');
+
             let now = new Date();    
             
             for(let i = 0; i < trades.length; i++) {
@@ -41,9 +48,19 @@ class TradeQueue {
                     this.trades.push(trade);   
                 }
             }
+
+            console.log('addTrades-4:');            
         } else {
+
+            console.log('addTrades-5:');
+
             this.trades.push.apply(this.trades, trades);
+
+            console.log('addTrades-6: this.trades.length=' + this.trades.length);   
+
             this.removeOldTrades();                
+
+            console.log('addTrades-7: this.trades.length=' + this.trades.length);               
         }
         
         this.calcStats();    
@@ -53,19 +70,30 @@ class TradeQueue {
         // Find cut index
         let now = new Date();
         let removeCount = -1;
+
+        console.log('removeOldTrades-1:');
+        console.log('    now=' + now);
+        console.log('    this.period=' + this.period);
+
         for(let i = 0; i < this.trades.length; i++) {
             let trade = this.trades[i];
             let elapsed = (now - trade.timestamp) / 1000;;
             
+            console.log('    i=' + i + ', trade.timestamp=' + trade.timestamp + ', elapsed=' + elapsed + ', ');   
+
             if (elapsed < this.period) {
                 removeCount = i; 
                 break;                
             }
         }
 
+        console.log('removeOldTrades-2: removeCount=' + removeCount);
+
         if (removeCount >= 0) {
             this.trades.splice(0, removeCount);   
         }
+
+        console.log('removeOldTrades-3: this.trades.length=' + this.trades.length);           
     }
 
     calcStats() {
