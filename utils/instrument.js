@@ -27,7 +27,7 @@ class Instrument {
     }
 
     getCurrentTimestamp() {
-        return Math.floor(Date.now().getTme()/1000);  
+        return Math.floor(Date.now()/1000);  
     }
 
     requestTrades() {
