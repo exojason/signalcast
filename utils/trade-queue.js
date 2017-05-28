@@ -30,14 +30,8 @@ class TradeQueue {
     }
 
     addTrades(trades) {
-        console.log('addTrades-1: trades.length=' + trades.length);
-        console.log('addTrades-2: this.trades.length=' + this.trades.length);        
-
         if (!this.trades.length) {
             let now = new Date();    
-
-            console.log('addTrades-3a: now=' + now);
-            console.log('addTrades-3b: this.period=' + this.period);
 
             for(let i = 0; i < trades.length; i++) {
                 let trade = trades[i];        
@@ -46,20 +40,11 @@ class TradeQueue {
                 if (elapsed <= this.period) {   
                     this.trades.push(trade);   
                 }                     
-            }
-
-            console.log('addTrades-4:');            
+            }            
         } else {
-
-            console.log('addTrades-5:');
-
             this.trades.push.apply(this.trades, trades);
 
-            console.log('addTrades-6: this.trades.length=' + this.trades.length);   
-
-            this.removeOldTrades();                
-
-            console.log('addTrades-7: this.trades.length=' + this.trades.length);               
+            this.removeOldTrades();                         
         }
         
         this.calcStats();    
