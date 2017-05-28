@@ -64,10 +64,15 @@ class Instrument {
     }
 
     fixTradeTimestamps(trades) {
+        var date = new Date();
+        console.log('TimezoneOffset: ' + date.getTimezoneOffset());
+        var timezoneOffsetMS = 1000 * 60 * date.getTimezoneOffset()
+
         for(let i = 0; i < trades.length; i++) {
             let trade = trades[i];
-            
-            trade.timestamp = new Date((new Date(trade.date))*1 - 1000*3600*7);
+
+            trade.timestamp = new Date((new Date(trade.date))*1 - timezoneOffsetMS);            
+            //trade.timestamp = new Date((new Date(trade.date))*1 - 1000*3600*7);
             delete trade.date;        
         }    
     }
