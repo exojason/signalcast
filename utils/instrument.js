@@ -26,8 +26,12 @@ class Instrument {
         }
     }
 
+    getCurrentTimestamp() {
+        return Math.floor(Date.now().getTme()/1000);  
+    }
+
     requestTrades() {
-        var currentTimestamp = Math.floor(Date.now() / 1000);    
+        var currentTimestamp = this.getCurrentTimestamp();
         
         if (!this.lastRequest) {
             var start = currentTimestamp - this.TRADE_HISTORY;
