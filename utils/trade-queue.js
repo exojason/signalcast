@@ -43,16 +43,9 @@ class TradeQueue {
                 let trade = trades[i];        
                 let elapsed = (now - trade.timestamp) / 1000;
 
-                //console.log('addTrades-3c: trade.timestamp=' + trade.timestamp);                
-                //console.log('addTrades-3d: elapsed=' + elapsed);
-
                 if (elapsed <= this.period) {   
-                    //console.log('addTrades-3e:');                    
-
                     this.trades.push(trade);   
-                }
-
-                //console.log('addTrades-3f: this.trades.length=' + this.trades.length);                      
+                }                     
             }
 
             console.log('addTrades-4:');            
@@ -77,15 +70,9 @@ class TradeQueue {
         let now = new Date();
         let removeCount = -1;
 
-        console.log('removeOldTrades-1:');
-        console.log('    now=' + now);
-        console.log('    this.period=' + this.period);
-
         for(let i = 0; i < this.trades.length; i++) {
             let trade = this.trades[i];
-            let elapsed = (now - trade.timestamp) / 1000;;
-            
-            //console.log('    i=' + i + ', trade.timestamp=' + trade.timestamp + ', elapsed=' + elapsed + ', ');   
+            let elapsed = (now - trade.timestamp) / 1000;; 
 
             if (elapsed < this.period) {
                 removeCount = i; 
@@ -93,19 +80,12 @@ class TradeQueue {
             }
         }
 
-        console.log('removeOldTrades-2: removeCount=' + removeCount);
-
         if (removeCount >= 0) {
             this.trades.splice(0, removeCount);   
-        }
-
-        console.log('removeOldTrades-3: this.trades.length=' + this.trades.length);           
+        }        
     }
 
     calcStats() {
-        console.log('calcStats-: trades:');
-        console.log(this.trades);
-
         this.open = this.trades[0].rate;
         this.low = this.open;
         this.high = this.open;    
