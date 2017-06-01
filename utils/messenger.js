@@ -4,45 +4,53 @@ const NEXMO_API_KEY = 'b9cc018a';
 const NEXMO_API_SECRET = 'a220e1b3a3e4e843';
 const NEXMO_PHONE_NUMBER = '12034899933';
 
-const nexmo = new Nexmo({
-    apiKey: NEXMO_API_KEY,
-    apiSecret: NEXMO_API_SECRET
-});
-
 class Messenger {
     constructor(config) {
+        this.timezoneOffset = (new Date()).getTimezoneOffset();
+
+        this.nexmo = new Nexmo({
+            apiKey: NEXMO_API_KEY,
+            apiSecret: NEXMO_API_SECRET
+        });
+
         this.users = {};
 
         for(let i = 0; i < config.users.length; i++) {
             let user = config.users[i];
             this.users[user.username] = user;
         }
+
+        this.messageQueue = [];
+
+        //this.processNextMessage();      
     }
 
-    send(message, subscriber) {
-        for(let i = 0; i > subscribers.length; i++) {
+    send(text, subscribers) {
+        for(let i = 0; i < subscribers.length; i++) {
             let subscriber = subscribers[i];
             let user = this.users[subscriber]; 
 
             if (!this.isBlackoutPeriod(user)) {
-                this.sendText(message, user);
+                console.log('SENDING: ' + text + ' => ' + user.phone);
+
+                this.messageQueue.push({
+                    text: text,                    
+                    phone: user.phone
+                });                
             }
         }
     }
 
     isBlackoutPeriod(user) {
-        let now = new Date();
-
         for(let i = 0; i < user.blackoutPeriods.length; i++) {
+            var currentTimeValue = this.getCurrentTimeValue();
+
             let blackoutPeriod = user.blackoutPeriods[i];
-            let blackoutStart = this.createDateTime(blackoutPeriod.start);
-            let blackoutEnd = this.createDateTime(blackoutPeriod.end);     
 
-            if (blackoutEnd.getHours() < blackoutStart.getHours()) {
-                blackoutEnd.setDate(blackoutEnd.getDate() + 1);
-            }
+            let blackoutStart = this.createTimeValue(blackoutPeriod.start, user.timezoneOffset);
+            let blackoutEnd = this.createTimeValue(blackoutPeriod.end, user.timezoneOffset);
 
-            if (blackoutStart < now && now < blackoutEnd) {
+            if (blackoutStart < currentTimeValue && currentTimeValue < blackoutEnd) {
                 return true;
             }
         }
@@ -50,11 +58,18 @@ class Messenger {
         return false;
     }
 
-    parseTime(timeStr) {
+    getCurrentTimeValue() {
+        let now = new Date();
 
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+
+        let value = hours + (minutes / 60);
+
+        return value;
     }
 
-    createDateTime(timeStr) {
+    createTimeValue(timeStr, timezoneOffset) {
         let meridiem;
         if (timeStr.length >= 3) {
             let str = timeStr.substr(timeStr.length - 2).toLowerCase();
@@ -69,27 +84,42 @@ class Messenger {
         let minutes = parts.length >= 2 ? parseInt(parts[1]) : 0;
         let seconds = parts.length == 3 ? parseInt(parts[2]) : 0;
         
+        // Account for 12-hour clock
+        if (meridiem == 'am' && hours == 12) {
+            hours = 0;
+        }
+
+        // Adjust for 12 hour clock
         if (meridiem == 'pm') {
             hours += 12;
         }
 
-        let dateTime = new Date();
-        dateTime.setHours(hours, minutes, seconds);
+        let value = hours + (minutes / 60);
+        value += (timezoneOffset - this.timezoneOffset) / 60;
+        value %= 24;
 
-        return dateTime;
+        return value;
     }
 
-    sendText(message, user) {
-        nexmo.message.sendSms(
-            NEXMO_PHONE_NUMBER, user.phone, message,
-            (err, responseData) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.dir(responseData);
+    processNextMessage() {
+        if (this.messageQueue.length > 0) {
+            var message = this.messageQueue.shift();
+
+            this.nexmo.message.sendSms(
+                NEXMO_PHONE_NUMBER, message.phone, message.text,
+                (err, responseData) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.dir(responseData);
+                    }
                 }
-            }
-        );    
+            );             
+        }
+
+        setTimeout(() => {
+            this.processNextMessage();
+        }, 1000);
     }
 }
 

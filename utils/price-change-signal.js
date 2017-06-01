@@ -3,13 +3,12 @@ var TradeQueue = require('./trade-queue').TradeQueue;
 
 class PriceChangeSignal extends Signal {
     constructor(config, instrumentManager, messenger) {
-        super(instrumentManager, messenger);
+        super(config, instrumentManager, messenger);
         
         this.symbol = config.symbol;
         this.period = this.parseTimespan(config.period);
         this.threshold = this.parsePercent(config.threshold);
-        this.timeout = this.parseTimespan(config.timeout);
-        this.subscribers = config.subscribers;
+        this.direction = this.parseDirection(config.threshold);
         
         this.validateConfiguration();
 
@@ -22,45 +21,59 @@ class PriceChangeSignal extends Signal {
     onTrades(instrument, trades) {    
         this.tradeQueue.addTrades(trades);
         
-        this.calc();
+        this.update();
     }
 
-    calc() {
+    update() {
         if (this.tradeQueue.length < 2) { return; }
-        
-        let trade1 = this.tradeQueue.first;
-        let trade2 = this.tradeQueue.last;
-        
-        let price1 = trade1.rate;
-        let price2 = trade2.rate;
-            
-        let change = price1 - price2; 
-        this.percentChange = change / price1;
-        
+
         console.log('PriceChangeSignal (' + this.symbol + '): trades.length=' + this.tradeQueue.length);    
-        console.log('price1=' + trade1.rate + ', timstamp=' + trade1.timestamp);
-        console.log('price2=' + trade2.rate + ', timstamp=' + trade2.timestamp);
-        
-        let elapsed = (trade2.timestamp - trade1.timestamp) / 1000;;
+
+        let openingTrade = this.tradeQueue.open;
+        let highTrade = this.tradeQueue.high;
+        let lowTrade = this.tradeQueue.low;                
+        let closingTrade = this.tradeQueue.close;
+        let elapsed = (closingTrade.timestamp - openingTrade.timestamp) / 1000;;        
+
+        console.log('open=' + openingTrade.rate + ', timstamp=' + openingTrade.timestamp);
+        console.log('high=' + highTrade.rate + ', timstamp=' + highTrade.timestamp);
+        console.log('low=' + lowTrade.rate + ', timstamp=' + lowTrade.timestamp);        
+        console.log('close=' + closingTrade.rate + ', timstamp=' + closingTrade.timestamp);        
         console.log('elapsed=' + elapsed);
-        
-        console.log('change=' + change);        
-        console.log('percentChange=' + this.percentChange);        
-        
-        if (Math.abs(this.percentChange) >= this.threshhold) {
-            this.notify();
+
+        let message;
+
+        if (!this.direction || this.direction == '+') {
+            var upsidePercentChange = (closingTrade.rate - lowTrade.rate) / lowTrade.rate;
+            console.log('upsidePercentChange=' + upsidePercentChange);            
+
+            if (upsidePercentChange >= this.threshold) {
+                message = this.createMessage(upsidePercentChange);
+            }
+        }
+        if (!this.direction || this.direction == '-') {
+            var downsidePercentChange = (closingTrade.rate - highTrade.rate) / highTrade.rate; 
+            console.log('downsidePercentChange=' + downsidePercentChange);   
+
+            if (downsidePercentChange <= this.threshold) {
+                message = this.createMessage(downsidePercentChange);                
+            }
+        }
+
+        if (message) {
+            this.notify(message);
         }
     }
 
-    createMessage() {
+    createMessage(percentChange) {
         let message;
         
         let periodFormatted = parseFloat(this.period / 60.0).toFixed(0) + ' mins';
         
-        if (this.priceChange > 0) {
-            message = 'Price Surge (' + this.symbol + '): ' + 100 * this.percentChange + '%' + ' in ' + periodFormatted;        
+        if (percentChange > 0) {
+            message = 'Price Surge (' + this.symbol + '): ' + (Math.abs(100 * percentChange)).toFixed(1) + '%' + ' in ' + periodFormatted;        
         } else {
-            message = 'Price Drop (' + this.symbol + '): ' + 100 * this.percentChange + '%' + ' in ' + periodFormatted;                 
+            message = 'Price Drop (' + this.symbol + '): ' + (Math.abs(100 * percentChange)).toFixed(1) + '%' + ' in ' + periodFormatted;                 
         }
         
         return message;

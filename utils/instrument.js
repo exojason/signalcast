@@ -1,5 +1,4 @@
-Poloniex = require('poloniex-api-node');
-poloniex = new Poloniex();
+var MarketAPI = require('./market-api').MarketAPI;
 
 class Instrument {
     constructor(symbol) {    
@@ -12,6 +11,8 @@ class Instrument {
         this.trades = [];
         this.lastRequest = null;
         
+        this.marketAPI = new MarketAPI();
+
         this.requestTrades();
     }
 
@@ -45,14 +46,14 @@ class Instrument {
         
         console.log('REQUEST: Start=' + new Date(start * 1000) + ', End=' + new Date(end * 1000));
         
-        poloniex.returnTradeHistory(this.symbol, start, end, (err, trades) => {
+        this.marketAPI.requestTrades(this.symbol, start, end, (err, trades) => {
             if (err){
                 console.log(err);
             }       
             
             if (trades && trades.length) {        
                 trades.reverse();
-                this.fixTradeTimestamps(trades);            
+                this.fixTrades(trades);            
             
                 console.log(this.symbol + ' => ' + trades.length +  ' new trades');            
             
@@ -67,15 +68,21 @@ class Instrument {
         }, 30000);
     }
 
-    fixTradeTimestamps(trades) {
+    fixTrades(trades) {
         var date = new Date();
         var timezoneOffsetMS = 1000 * 60 * date.getTimezoneOffset()
 
         for(let i = 0; i < trades.length; i++) {
             let trade = trades[i];
 
+            trade.rate = parseFloat(trade.rate);
+            trade.amount = parseFloat(trade.amount);
+            trade.total = parseFloat(trade.total);
+
             trade.timestamp = new Date((new Date(trade.date)) * 1 - timezoneOffsetMS);            
             delete trade.date;        
+
+
         }    
     }
 

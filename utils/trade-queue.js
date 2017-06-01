@@ -21,14 +21,6 @@ class TradeQueue {
         return this.trades[index];
     }
 
-    get first() {
-        return this.trades[0];
-    }
-
-    get last() {
-        return this.trades.length > 0 ? this.trades[this.trades.length-1] : null;
-    }
-
     addTrades(trades) {
         if (!this.trades.length) {
             let now = new Date();    
@@ -51,7 +43,6 @@ class TradeQueue {
     }
 
     removeOldTrades() {
-        // Find cut index
         let now = new Date();
         let removeCount = -1;
 
@@ -71,10 +62,10 @@ class TradeQueue {
     }
 
     calcStats() {
-        this.open = this.trades[0].rate;
+        this.open = this.trades[0];
         this.low = this.open;
         this.high = this.open;    
-        this.close = this.trades[this.trades.length - 1].rate;
+        this.close = this.trades[this.trades.length - 1];
         this.volume = 0;
         this.buyVolume = 0;
         this.sellVolume = 0;
@@ -82,11 +73,11 @@ class TradeQueue {
         for(let i = 0; i < this.trades.length; i++) {
             let trade = this.trades[i];
 
-            if (trade.rate < this.low) {
-                this.low = trade.rate;
+            if (trade.rate < this.low.rate) {
+                this.low = trade;
             }
-            if (trade.rate > this.high) {
-                this.high = trade.rate;
+            if (trade.rate > this.high.rate) {
+                this.high = trade;
             }
             
             this.volume += trade.amount;

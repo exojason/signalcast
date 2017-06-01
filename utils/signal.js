@@ -1,5 +1,8 @@
 class Signal {
-    constructor(instrumentManager, messenger) {
+    constructor(config, instrumentManager, messenger) {
+        this.type = config.type;
+        this.subscribers = config.subscribers;       
+        this.timeout = this.parseTimespan(config.timeout);         
         this.instrumentManager = instrumentManager;
         this.messenger = messenger;
 
@@ -19,6 +22,16 @@ class Signal {
             let value = parseFloat(str);
             
             return (value == NaN) ? null : value;
+        }
+    }
+
+    parseDirection(str) {
+        if (str.length > 0 && str.substr(0, 1) == '+') {
+            return '+';
+        } else if (str.length > 0 && str.substr(0, 1) == '-') {
+            return '-';
+        } else {
+            return null;
         }
     }
 
@@ -42,12 +55,18 @@ class Signal {
         return null;
     }
 
-    notify() {
-        if (!this.lastNotification || (new Date() - this.lastNotification) > this.timeout) {
-            let message = this.createMessage();
-            this.messenger.broadcast(message); 
+    notify(message) {        
+        var now = new Date();
+        var elapsed = this.lastNotification ? Math.ceil((now - this.lastNotification) / 1000) : 0;
 
-            this.lastNotification = new Date();       
+        console.log('elapsed=' + elapsed);
+        console.log('this.timeout=' + this.timeout);
+        console.log('this.lastNotification=' + this.lastNotification);
+
+        if (!this.lastNotification || elapsed > this.timeoutMS) {
+            this.messenger.send(message, this.subscribers); 
+
+            this.lastNotification = now;       
         }  
     }    
 }

@@ -9,9 +9,10 @@
             "username": "jason",
             "phone": "16266764594",
             "email": "jasonr11@gmail.com",
+            "timezoneOffset": 420,            
             "blackoutPeriods": [{
-                "start": "11:30 pm",
-                "end": "7 am"
+                "start": "11:30pm",
+                "end": "7:00am"
             }]
         },
         {
@@ -20,20 +21,84 @@
             "username": "dominic",
             "phone": "18506869304",
             "email": "domtasc@hotmail.com",
+            "timezoneOffset": 300,            
             "blackoutPeriods": [{
-                "start": "8:00pm",
-                "end": "5:00am"
+                "start": "12pm",
+                "end": "6:00am"
             }]
         }
     ],
     "signals": [        
         {
             "type": "PriceChange",
-            "symbol": "BTC_XMR",
-            "period": "10min",
-            "threshold": "9.0%",
+            "symbol": "BTC_ETH",
+            "threshold": "5%",            
+            "period": "15min",
             "timeout": "30min",
-            "subscribers": ["jason", "dominic"],
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        },      
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_XRP",
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        },   
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_LTC",
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        },    
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_DASH",
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        }, 
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_MAID",
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        },  
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_FCT",
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        },    
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_STR",
+            "threshold": "10%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
+            "enabled": true
+        }, 
+        {
+            "type": "PriceChange",
+            "symbol": "BTC_DOGE",
+            "threshold": "10%",            
+            "period": "15min",
+            "timeout": "30min",
+            "subscribers": ["dominic", "jason"],
             "enabled": true
         }
     ]
