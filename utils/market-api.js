@@ -25,14 +25,13 @@ class MarketAPI {
 
             switch(req.type) {
                 case 'tradeHistory':
+                    console.log('POLONIEX Request (tradeHistory): ' + (new Date()));                
                     this.poloniex.returnTradeHistory(req.symbol, req.start, req.end, req.callback);
                     break;
             }
         }
 
-        setTimeout(() => {
-            this.processNextRequest();
-        }, 1000);        
+        setTimeout(this.processNextRequest.bind(this), 500);        
     }        
 }
 

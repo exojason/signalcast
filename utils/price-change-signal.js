@@ -43,22 +43,23 @@ class PriceChangeSignal extends Signal {
 
         let message;
 
-        if (!this.direction || this.direction == '+') {
-            var upsidePercentChange = (closingTrade.rate - lowTrade.rate) / lowTrade.rate;
-            console.log('upsidePercentChange=' + upsidePercentChange);            
+        var upsidePercentChange = (closingTrade.rate - lowTrade.rate) / lowTrade.rate;
+        var downsidePercentChange = (closingTrade.rate - highTrade.rate) / highTrade.rate; 
 
-            if (upsidePercentChange >= this.threshold) {
-                message = this.createMessage(upsidePercentChange);
-            }
-        }
-        if (!this.direction || this.direction == '-') {
-            var downsidePercentChange = (closingTrade.rate - highTrade.rate) / highTrade.rate; 
-            console.log('downsidePercentChange=' + downsidePercentChange);   
+        console.log('upsidePercentChange=' + upsidePercentChange);     
+        console.log('downsidePercentChange=' + downsidePercentChange);   
+        console.log('direction=' + this.direction);           
+        console.log('threshold=' + this.threshold);           
 
-            if (downsidePercentChange <= this.threshold) {
-                message = this.createMessage(downsidePercentChange);                
-            }
-        }
+        if (this.direction == '+' && upsidePercentChange >= this.threshold) {                                   
+            message = this.createMessage(upsidePercentChange);            
+        } else if (this.direction == '-' && downsidePercentChange <= this.threshold) {            
+            message = this.createMessage(downsidePercentChange);                            
+        } else if (!this.direction && upsidePercentChange >= this.threshold) {
+            message = this.createMessage(upsidePercentChange);        
+        } else if (!this.direction && downsidePercentChange <= -this.threshold) {
+            message = this.createMessage(upsidePercentChange);        
+        }        
 
         if (message) {
             this.notify(message);

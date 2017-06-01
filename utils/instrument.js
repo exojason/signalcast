@@ -1,17 +1,14 @@
-var MarketAPI = require('./market-api').MarketAPI;
-
 class Instrument {
-    constructor(symbol) {    
+    constructor(symbol, marketAPI) {    
         this.REQUEST_OVERLAP = 5; // seconds
         this.TRADE_HISTORY = 3600; // seconds
         
         this.symbol = symbol;
+        this.marketAPI = marketAPI;        
         
         this.subscribers = [];
         this.trades = [];
         this.lastRequest = null;
-        
-        this.marketAPI = new MarketAPI();
 
         this.requestTrades();
     }

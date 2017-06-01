@@ -82,24 +82,6 @@
             "timeout": "30min",
             "subscribers": ["dominic", "jason"],
             "enabled": true
-        },    
-        {
-            "type": "PriceChange",
-            "symbol": "BTC_STR",
-            "threshold": "10%",            
-            "period": "15min",
-            "timeout": "30min",
-            "subscribers": ["dominic", "jason"],
-            "enabled": true
-        }, 
-        {
-            "type": "PriceChange",
-            "symbol": "BTC_DOGE",
-            "threshold": "10%",            
-            "period": "15min",
-            "timeout": "30min",
-            "subscribers": ["dominic", "jason"],
-            "enabled": true
-        }                                                             
+        }                                                            
     ]
 }

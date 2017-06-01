@@ -22,7 +22,7 @@ class Messenger {
 
         this.messageQueue = [];
 
-        //this.processNextMessage();      
+        this.processNextMessage();      
     }
 
     send(text, subscribers) {
@@ -117,9 +117,7 @@ class Messenger {
             );             
         }
 
-        setTimeout(() => {
-            this.processNextMessage();
-        }, 1000);
+        setTimeout(this.processNextMessage.bind(this), 1000);
     }
 }
 
