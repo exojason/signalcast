@@ -32,7 +32,7 @@
         {
             "type": "PriceChange",
             "symbol": "BTC_ETH",
-            "threshold": "5%",            
+            "threshold": "2%",            
             "period": "15min",
             "timeout": "30min",
             "subscribers": ["dominic", "jason"],
@@ -41,7 +41,7 @@
         {
             "type": "PriceChange",
             "symbol": "BTC_XRP",
-            "threshold": "5%",            
+            "threshold": "2%",            
             "period": "15min",
             "timeout": "30min",
             "subscribers": ["dominic", "jason"],
