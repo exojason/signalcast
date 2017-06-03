@@ -49,35 +49,30 @@ class PriceChangeSignal extends Signal {
         console.log('upsidePercentChange=' + upsidePercentChange);     
         console.log('downsidePercentChange=' + downsidePercentChange);   
         console.log('direction=' + this.direction);           
-        console.log('threshold=' + this.threshold);           
+        console.log('threshold=' + this.threshold);                 
 
-        if (this.direction == '+' && upsidePercentChange >= this.threshold) {                                   
-            message = this.createMessage(upsidePercentChange);            
-        } else if (this.direction == '-' && downsidePercentChange <= this.threshold) {            
-            message = this.createMessage(downsidePercentChange);                            
-        } else if (!this.direction && upsidePercentChange >= this.threshold) {
-            message = this.createMessage(upsidePercentChange);        
-        } else if (!this.direction && downsidePercentChange <= -this.threshold) {
-            message = this.createMessage(upsidePercentChange);        
-        }        
+        if ((this.direction == '+' && upsidePercentChange >= this.threshold) ||
+            (!this.direction && upsidePercentChange >= this.threshold)) {
+        
+            let periodFormatted = parseFloat(this.period / 60.0).toFixed(0) + ' mins';
+            let priceChangeFormatted = (Math.abs(100 * upsidePercentChange)).toFixed(1) + '%';
+            let message = 'Price Surge (' + this.symbol + '): ' + 
+                          priceChangeFormatted + ' in ' + periodFormatted + ', ' +
+                          lowTrade.rate.toFixed(8) + ' => ' + closingTrade.rate.toFixed(8);  
 
-        if (message) {
+            this.notify(message);
+
+        } else if ((this.direction == '-' && downsidePercentChange <= this.threshold) ||
+                   (!this.direction && downsidePercentChange <= -this.threshold)) {
+
+            let periodFormatted = parseFloat(this.period / 60.0).toFixed(0) + ' mins';
+            let priceChangeFormatted = (Math.abs(100 * downsidePercentChange)).toFixed(1) + '%';
+            let message = 'Price Drop (' + this.symbol + '): ' + 
+                          priceChangeFormatted + ' in ' + periodFormatted + ', ' +
+                          highTrade.rate.toFixed(8) + ' => ' + closingTrade.rate.toFixed(8);  
+
             this.notify(message);
         }
-    }
-
-    createMessage(percentChange) {
-        let message;
-        
-        let periodFormatted = parseFloat(this.period / 60.0).toFixed(0) + ' mins';
-        
-        if (percentChange > 0) {
-            message = 'Price Surge (' + this.symbol + '): ' + (Math.abs(100 * percentChange)).toFixed(1) + '%' + ' in ' + periodFormatted;        
-        } else {
-            message = 'Price Drop (' + this.symbol + '): ' + (Math.abs(100 * percentChange)).toFixed(1) + '%' + ' in ' + periodFormatted;                 
-        }
-        
-        return message;
     }
 }
 

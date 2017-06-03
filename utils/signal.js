@@ -63,7 +63,7 @@ class Signal {
         console.log('this.timeout=' + this.timeout);
         console.log('this.lastNotification=' + this.lastNotification);
 
-        if (!this.lastNotification || elapsed > this.timeoutMS) {
+        if (!this.lastNotification || elapsed > this.timeout) {
             this.messenger.send(message, this.subscribers); 
 
             this.lastNotification = now;       
