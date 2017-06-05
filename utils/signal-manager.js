@@ -1,17 +1,41 @@
-var InstrumentManager = require('./instrument-manager').InstrumentManager;
-var PriceChangeSignal = require('./price-change-signal').PriceChangeSignal;
+
+const PriceChangeSignal = require('./price-change-signal').PriceChangeSignal;
 
 class SignalManager {
-    constructor(config, messenger) {
+    constructor(config, instrumentManager, messenger) {
+        this.config = config;
+        this.instrumentManager = instrumentManager;
         this.messenger = messenger;
-        this.instrumentManager = new InstrumentManager();
         this.signals = [];
-        
-        for(var i = 0; i < config.signals.length; i++) {        
-            var signal = this.createSignal(config.signals[i]);
-            if (signal && signal.enabled) {
-                this.signals.push(signal);
-            }
+    }
+
+    init() {
+        for(let i = 0; i < this.config.signals.length; i++) {      
+            var signalConfig = this.config.signals[i];
+            switch(signalConfig.type) {
+                case 'PriceChange':
+                    if (Array.isArray(signalConfig.symbol)) {
+                        let symbols = signalConfig.symbol;
+                        for(let i = 0; i < symbols.length; i++) {
+                            let symbolConfig = this.cloneConfig(signalConfig);
+                            symbolConfig.symbol = symbols[i]; 
+                            let signal = this.createSignal(symbolConfig);
+                            this.signals.push(signal);
+                        }
+                    } else if (signalConfig.symbol == "*")  {
+                        let symbols = Object.keys(this.instrumentManager.instruments);
+                        for(let i = 0; i < symbols.length; i++) {
+                            let symbolConfig = this.cloneConfig(signalConfig);
+                            symbolConfig.symbol = symbols[i]; 
+                            let signal = this.createSignal(symbolConfig);
+                            this.signals.push(signal);
+                        }
+                    } else {
+                        let signal = this.createSignal(signalConfig);
+                        this.signals.push(signal);
+                    }
+                    break;                    
+            } 
         } 
     }
 
@@ -22,6 +46,10 @@ class SignalManager {
             default:
                 return null;                    
         }    
+    }
+
+    cloneConfig(config) {
+        return JSON.parse(JSON.stringify(config));        
     }
 }
 

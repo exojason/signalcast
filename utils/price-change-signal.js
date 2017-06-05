@@ -12,7 +12,7 @@ class PriceChangeSignal extends Signal {
         
         this.validateConfiguration();
 
-        this.instrument = this.instrumentManager.createInstrument(this.symbol);
+        this.instrument = this.instrumentManager.getInstrument(this.symbol);
         this.instrument.subscribe(this);
         
         this.tradeQueue = new TradeQueue(this.period);    

@@ -4,21 +4,31 @@ var MarketAPI = require('./market-api').MarketAPI;
 class InstrumentManager {
     constructor() {
         this.instruments = {};
-
-        this.marketAPI = new MarketAPI();
+        this.marketAPI = new MarketAPI();   
+        this.marketAPI.subscribe(this);     
     }
 
-    createInstrument(symbol) {
-        let instrument;
-        
-        if (this.instruments[symbol]) {
-            instrument = this.instruments[symbol];
-        } else {     
-            instrument = new Instrument(symbol, this.marketAPI);            
-            this.instruments[symbol] = instrument;
-        }
-        
-        return instrument;
+    init(callback) {
+        this.marketAPI = new MarketAPI();   
+        this.marketAPI.subscribe(this);   
+
+        this.marketAPI.init(() => {
+            for(let i = 0; i < this.marketAPI.markets.length; i++) {
+                let market = this.marketAPI.markets[i];
+                let instrument = new Instrument(market, this.marketAPI);            
+                this.instruments[market.symbol] = instrument;
+            }
+            callback();
+        });       
+    }
+
+    getInstrument(symbol) {        
+        return this.instruments[symbol];
+    }
+
+    onTrades(symbol, trades) {
+        let instrument = this.getInstrument(symbol);
+        instrument.processTrades(trades);
     }
 }
 

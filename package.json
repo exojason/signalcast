@@ -8,7 +8,9 @@
     "express": "3.2.x",
     "mustache": "2.1.x",
     "nexmo": "2.0.x",
-    "poloniex-api-node": "1.1.x"
+    "plnx": "0.0.10",
+    "poloniex-api-node": "1.1.x",
+    "poloniex-unofficial": "^1.1.2"
   },
   "private": true
 }

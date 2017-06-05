@@ -6,16 +6,24 @@ const mustache = require('mustache');
 
 global.__base = __dirname;
 
-var nodeEnv = process.env.NODE_ENV || 'development';
+const nodeEnv = process.env.NODE_ENV || 'development';
 
-var config = require('./config/' + nodeEnv);
+const config = require('./config/' + nodeEnv);
 console.log(config);
 
+const InstrumentManager = require(__base + '/utils/instrument-manager').InstrumentManager;
 const Messenger = require(__base + '/utils/messenger').Messenger;
 const SignalManager = require(__base + '/utils/signal-manager').SignalManager;
 
+const instrumentManager = new InstrumentManager();
 const messenger = new Messenger(config);
-const signalManager = new SignalManager(config, messenger);  
+const signalManager = new SignalManager(config, instrumentManager, messenger);  
+
+instrumentManager.init(() => {
+    signalManager.init();
+});
+
+
 
 process.on('uncaughtException', function (error) {
    console.log(error.stack);

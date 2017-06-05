@@ -31,12 +31,53 @@
     "signals": [                
         {
             "type": "PriceChange",
-            "symbol": "BTC_ETH",
-            "threshold": "0.1%",            
-            "period": "5min",
-            "timeout": "2min",
+            "symbol": ["BTC_ETH", "BTC_XMR", "BTC_LTC", "BTC_DASH", "BTC_MAID", "BTC_FCT"],
+            "threshold": "5%",            
+            "period": "15min",
+            "timeout": "30min",
+            "priority": "high",
             "subscribers": ["jason"],
             "enabled": true
-        }                         
+        },
+        {
+            "type": "PriceChange",
+            "symbol": ["BTC_STR", "BTC_DOGE"],
+            "threshold": "10%",            
+            "period": "15min",
+            "timeout": "30min",
+            "priority": "high",            
+            "subscribers": ["jason"],
+            "enabled": true
+        },   
+        {
+            "type": "PriceChange",
+            "symbol": "*",
+            "threshold": "25%",            
+            "period": "30min",
+            "timeout": "30min",
+            "priority": "high",            
+            "subscribers": ["jason"],
+            "enabled": true
+        },
+        {
+            "type": "PriceChange",
+            "symbol": "*",
+            "threshold": "-20%",            
+            "period": "30min",
+            "timeout": "30min",
+            "priority": "high",            
+            "subscribers": ["jason"],
+            "enabled": true
+        },
+        {
+            "type": "PriceChange",
+            "symbol": "*",
+            "threshold": "9%",            
+            "period": "15min",
+            "timeout": "30min",
+            "priority": "low",               
+            "subscribers": ["jason"],
+            "enabled": true
+        }                                  
     ]
 }

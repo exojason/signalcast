@@ -2,7 +2,8 @@ class Signal {
     constructor(config, instrumentManager, messenger) {
         this.type = config.type;
         this.subscribers = config.subscribers;       
-        this.timeout = this.parseTimespan(config.timeout);         
+        this.timeout = this.parseTimespan(config.timeout);   
+        this.priority = config.priority;      
         this.instrumentManager = instrumentManager;
         this.messenger = messenger;
 
@@ -64,7 +65,7 @@ class Signal {
         console.log('this.lastNotification=' + this.lastNotification);
 
         if (!this.lastNotification || elapsed > this.timeout) {
-            this.messenger.send(message, this.subscribers); 
+            this.messenger.send(message, this.priority, this.subscribers); 
 
             this.lastNotification = now;       
         }  

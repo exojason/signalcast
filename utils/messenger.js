@@ -25,13 +25,13 @@ class Messenger {
         this.processNextMessage();      
     }
 
-    send(text, subscribers) {
+    send(text, priority, subscribers) {
         for(let i = 0; i < subscribers.length; i++) {
             let subscriber = subscribers[i];
             let user = this.users[subscriber]; 
 
-            if (!this.isBlackoutPeriod(user)) {
-                console.log('SENDING: ' + text + ' => ' + user.phone);
+            if (!this.isBlackoutPeriod(user) || priority == 'high') {
+                console.log('SENDING MSG: "' + text + '" to ' + user.phone);
 
                 this.messageQueue.push({
                     text: text,                    

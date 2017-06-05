@@ -28,78 +28,56 @@
             }]
         }
     ],
-    "signals": [        
+    "signals": [                
         {
             "type": "PriceChange",
-            "symbol": "BTC_ETH",
-            "threshold": "2%",            
+            "symbol": ["BTC_ETH", "BTC_XMR", "BTC_LTC", "BTC_DASH", "BTC_MAID", "BTC_FCT"],
+            "threshold": "5%",            
             "period": "15min",
             "timeout": "30min",
+            "priority": "high",
             "subscribers": ["dominic", "jason"],
             "enabled": true
-        },      
+        },
         {
             "type": "PriceChange",
-            "symbol": "BTC_XRP",
-            "threshold": "2%",            
+            "symbol": ["BTC_STR", "BTC_DOGE"],
+            "threshold": "10%",            
             "period": "15min",
             "timeout": "30min",
+            "priority": "high",            
             "subscribers": ["dominic", "jason"],
             "enabled": true
         },   
         {
             "type": "PriceChange",
-            "symbol": "BTC_LTC",
-            "threshold": "5%",            
-            "period": "15min",
+            "symbol": "*",
+            "threshold": "25%",            
+            "period": "30min",
             "timeout": "30min",
+            "priority": "high",            
             "subscribers": ["dominic", "jason"],
             "enabled": true
-        },    
+        },
         {
             "type": "PriceChange",
-            "symbol": "BTC_DASH",
-            "threshold": "5%",            
-            "period": "15min",
+            "symbol": "*",
+            "threshold": "-20%",            
+            "period": "30min",
             "timeout": "30min",
+            "priority": "high",            
             "subscribers": ["dominic", "jason"],
             "enabled": true
-        }, 
+        },
         {
             "type": "PriceChange",
-            "symbol": "BTC_MAID",
-            "threshold": "5%",            
+            "symbol": "*",
+            "threshold": "9%",            
             "period": "15min",
             "timeout": "30min",
+            "priority": "low",               
             "subscribers": ["dominic", "jason"],
             "enabled": true
-        },  
-        {
-            "type": "PriceChange",
-            "symbol": "BTC_FCT",
-            "threshold": "5%",            
-            "period": "15min",
-            "timeout": "30min",
-            "subscribers": ["dominic", "jason"],
-            "enabled": true
-        },    
-        {
-            "type": "PriceChange",
-            "symbol": "BTC_STR",
-            "threshold": "10%",            
-            "period": "15min",
-            "timeout": "30min",
-            "subscribers": ["dominic", "jason"],
-            "enabled": true
-        }, 
-        {
-            "type": "PriceChange",
-            "symbol": "BTC_DOGE",
-            "threshold": "10%",            
-            "period": "15min",
-            "timeout": "30min",
-            "subscribers": ["dominic", "jason"],
-            "enabled": true
-        }
+        }                                  
     ]
 }
