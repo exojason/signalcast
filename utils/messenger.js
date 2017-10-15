@@ -1,7 +1,7 @@
 const Nexmo = require('nexmo');
 
 const NEXMO_API_KEY = 'b9cc018a';
-const NEXMO_API_SECRET = 'a220e1b3a3e4e843';
+const NEXMO_API_SECRET = '8D40a8cC3e21e572';
 const NEXMO_PHONE_NUMBER = '12034899933';
 
 class Messenger {
